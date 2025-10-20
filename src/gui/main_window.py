@@ -731,17 +731,18 @@ For more information, see the documentation.
         # Clear status after 3 seconds
         self.root.after(3000, lambda: self.status_label.configure(text="Ready"))
 
-    def _on_created_set_selected(self, value: str):
-        """Handle selection from the Created Sets dropdown."""
+    def _on_created_set_selected(self, value):
+        if not value:
+            return
+        if value == "CompTIA Security+":
+            self._import_comptia_set()
+        # if using CTkOptionMenu, optionally reset the display to placeholder or first value:
         try:
-            if value == "CompTIA Security+":
-                # Trigger the existing import flow
-                self._import_comptia_set()
-            else:
-                # For now, unknown values are informational
-                messagebox.showinfo("Created Set", f"Selected: {value}")
-        except Exception as e:
-            logger.error(f"Failed to handle created set selection: {e}", exc_info=True)
+            # set to a neutral display if needed (or keep the selected value)
+            # self.created_sets_menu.set("CompTIA Security+")
+            pass
+        except Exception:
+            pass
     
     def _on_window_configure(self, event):
         """Handle window configuration changes."""
